@@ -15,8 +15,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  var num = 3;
-  var name = ['박상기', '김옥순', '박정훈'];
+  var name = [];
+  var num = 0;
+
+  void addName ( input ) {
+    setState(() {
+      name.add(input);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +30,19 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          showDialog(context: context, builder: (matContext){
-            return DialogUI(num: num);
+          showDialog(context: context, builder: (context){
+            return DialogUI( addName: addName );
           });
         },
       ),
       appBar: AppBar(
         title: Text(
-          'WHY NOT QUANT?',
+          num.toString(),
           style: TextStyle(fontWeight: FontWeight.w100),
         )
       ),
       body: ListView.builder(
-        itemCount: num,
+        itemCount: name.length,
         itemBuilder: (c, i){
           return ListTile(
             leading: Icon(Icons.account_circle),
@@ -49,8 +55,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class DialogUI extends StatelessWidget {
-  const DialogUI({super.key, this.num});
-  final num;
+  DialogUI({super.key, this.addName});
+  final addName;
+
+  var textInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,21 +75,24 @@ class DialogUI extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                   child: Text('Contact', style: TextStyle(fontSize: 20))
               ),
-              Expanded(
-                  child: Center(child: TextField())
-              ),
+              Expanded( child: Center(child: TextField( controller: textInput )) ),
               SizedBox(
                 // height: 50,
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(num.toString()),
                       TextButton(
                           onPressed: (){ Navigator.of(context).pop(); },
                           child: Text('Cancel')
                       ),
-                      TextButton(onPressed: (){}, child: Text('OK')),
+                      TextButton(
+                          onPressed: (){
+                            addName(textInput.text);
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('OK')
+                      ),
                     ],
                   ),
                 ),
