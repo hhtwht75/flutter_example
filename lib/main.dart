@@ -64,9 +64,9 @@ class DialogUI extends StatelessWidget {
   DialogUI({super.key, this.addName});
   final addName;
 
-  var inputName = TextEditingController();
-  var inputAffiliation = TextEditingController();
-  var inputNumber = TextEditingController();
+  final inputName = TextEditingController();
+  final inputAffiliation = TextEditingController();
+  final inputNumber = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
