@@ -16,11 +16,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   var name = [];
+  var affiliation = [];
+  var number = [];
   var num = 0;
 
-  void addName ( input ) {
+  void addName ( inputName, inputAffiliation, inputNumber ) {
     setState(() {
-      name.add(input);
+      name.add(inputName);
+      affiliation.add(inputAffiliation);
+      number.add(inputNumber);
     });
   }
 
@@ -37,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       ),
       appBar: AppBar(
         title: Text(
-          num.toString(),
+          name.length.toString(),
           style: TextStyle(fontWeight: FontWeight.w100),
         )
       ),
@@ -47,6 +51,8 @@ class _MyAppState extends State<MyApp> {
           return ListTile(
             leading: Icon(Icons.account_circle),
             title: Text(name[i]),
+            subtitle: Text(affiliation[i]),
+            trailing: Text(number[i]),
           );
         },
       ),
@@ -58,14 +64,16 @@ class DialogUI extends StatelessWidget {
   DialogUI({super.key, this.addName});
   final addName;
 
-  var textInput = TextEditingController();
+  var inputName = TextEditingController();
+  var inputAffiliation = TextEditingController();
+  var inputNumber = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
         insetPadding: EdgeInsets.fromLTRB(50, 0, 50, 0),
         child: Container(
-          height: 200,
+          height: 500,
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +83,43 @@ class DialogUI extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                   child: Text('Contact', style: TextStyle(fontSize: 20))
               ),
-              Expanded( child: Center(child: TextField( controller: textInput )) ),
+              Expanded(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.person),
+                        labelText: '이름 *',
+                        hintText: '홍길동',
+                      ),
+                      validator: (String? value) {
+                        return (value != null) ? '이름을 입력해주세요' : null;
+                      },
+                      controller: inputName,
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.person),
+                        labelText: '소속',
+                        hintText: '한국전자',
+                      ),
+                      controller: inputAffiliation,
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.person),
+                        labelText: '연락처 *',
+                        hintText: '010-1234-5678',
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: (String? value) {
+                        return (value != null) ? '연락처를 입력해주세요' : null;
+                      },
+                      controller: inputNumber,
+                    ),
+                  ]
+                )
+              ),
               SizedBox(
                 // height: 50,
                 child: Center(
@@ -88,7 +132,7 @@ class DialogUI extends StatelessWidget {
                       ),
                       TextButton(
                           onPressed: (){
-                            addName(textInput.text);
+                            addName(inputName.text, inputAffiliation.text, inputNumber.text);
                             Navigator.of(context).pop();
                           },
                           child: Text('OK')
