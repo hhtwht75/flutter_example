@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   var number = [];
   var num = 0;
 
-  void addName ( inputName, inputAffiliation, inputNumber ) {
+  void addContact ( inputName, inputAffiliation, inputNumber ) {
     setState(() {
       name.add(inputName);
       affiliation.add(inputAffiliation);
@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           showDialog(context: context, builder: (context){
-            return DialogUI( addName: addName );
+            return DialogUI( addContact: addContact );
           });
         },
         child: Icon(Icons.add),
@@ -94,14 +94,14 @@ class _MyAppState extends State<MyApp> {
 }
 
 class DialogUI extends StatelessWidget {
-  DialogUI({super.key, this.addName});
-  final addName;
+  DialogUI({super.key, this.addContact});
+  final addContact;
 
-  final formkey = GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
 
-  final inputName = TextEditingController();
-  final inputAffiliation = TextEditingController();
-  final inputNumber = TextEditingController();
+  final _inputName = TextEditingController();
+  final _inputAffiliation = TextEditingController();
+  final _inputNumber = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class DialogUI extends StatelessWidget {
               ),
               Expanded(
                 child: Form(
-                  key: formkey,
+                  key: _formkey,
                   child: Column(
                     children: [
                       TextFormField(
@@ -132,7 +132,7 @@ class DialogUI extends StatelessWidget {
                         validator: (value) {
                           return (value!.isEmpty) ? '이름을 입력해주세요' : null;
                         },
-                        controller: inputName,
+                        controller: _inputName,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
                       TextFormField(
@@ -141,7 +141,7 @@ class DialogUI extends StatelessWidget {
                           labelText: '소속',
                           hintText: '한국전자',
                         ),
-                        controller: inputAffiliation,
+                        controller: _inputAffiliation,
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -153,7 +153,7 @@ class DialogUI extends StatelessWidget {
                         validator: (value) {
                           return (value!.isEmpty) ? '연락처를 입력해주세요' : null;
                         },
-                        controller: inputNumber,
+                        controller: _inputNumber,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
                     ]
@@ -172,8 +172,8 @@ class DialogUI extends StatelessWidget {
                       ),
                       TextButton(
                           onPressed: (){
-                            if (formkey.currentState!.validate()) {
-                              addName(inputName.text, inputAffiliation.text, inputNumber.text);
+                            if (_formkey.currentState!.validate()) {
+                              addContact(_inputName.text, _inputAffiliation.text, _inputNumber.text);
                               Navigator.of(context).pop();
                             }
                           },
